@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Database Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button active" data-tab="enter">Enter Cards</button>
+            <button class="tab-button" data-tab="query">Query Cards</button>
+            <button class="tab-button" data-tab="modify">Modify Database</button>
+        </div>
+
+        <div class="tab-content active" id="enter">
+            <h2>Enter New Card</h2>
+            <form id="cardForm">
+                <input type="text" placeholder="Field 1" required>
+                <input type="text" placeholder="Field 2" required>
+                <input type="text" placeholder="Field 3" required>
+                <input type="text" placeholder="Field 4" required>
+                <input type="text" placeholder="Field 5" required>
+                <input type="text" placeholder="Field 6" required>
+                <input type="text" placeholder="Field 7" required>
+                <input type="text" placeholder="Field 8" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="tab-content" id="query">
+            <h2>Query Cards</h2>
+            <form id="queryForm">
+                <input type="text" placeholder="Search term">
+                <button type="submit">Search</button>
+            </form>
+            <div id="queryResults"></div>
+        </div>
+
+        <div class="tab-content" id="modify">
+            <h2>Modify Database</h2>
+            <form id="modifyForm">
+                <input type="text" placeholder="Card ID">
+                <input type="text" placeholder="Field to modify">
+                <input type="text" placeholder="New value">
+                <button type="submit">Modify</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
