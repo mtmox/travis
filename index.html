@@ -18,14 +18,18 @@
         <div class="tab-content active" id="enter">
             <h2>Enter New Card</h2>
             <form id="cardForm">
-                <input type="text" placeholder="Field 1" required>
-                <input type="text" placeholder="Field 2" required>
-                <input type="text" placeholder="Field 3" required>
-                <input type="text" placeholder="Field 4" required>
-                <input type="text" placeholder="Field 5" required>
-                <input type="text" placeholder="Field 6" required>
-                <input type="text" placeholder="Field 7" required>
-                <input type="text" placeholder="Field 8" required>
+                <input type="number" name="year" placeholder="Year" required>
+                <input type="text" name="description" placeholder="Description" required>
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="text" name="type" placeholder="Type" required>
+                <input type="text" name="condition" placeholder="Condition" required>
+                <input type="number" name="cost" placeholder="Cost" required step="0.01">
+                <input type="number" name="quantity" placeholder="Quantity" required min="1" value="1">
+                <select name="sold" required>
+                    <option value="">Sold?</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
                 <button type="submit">Submit</button>
             </form>
         </div>
@@ -33,7 +37,14 @@
         <div class="tab-content" id="query">
             <h2>Query Cards</h2>
             <form id="queryForm">
-                <input type="text" placeholder="Search term">
+                <input type="number" name="year" placeholder="Year">
+                <input type="text" name="description" placeholder="Description">
+                <input type="text" name="name" placeholder="Name">
+                <select name="sold">
+                    <option value="">Sold Status</option>
+                    <option value="0">Not Sold</option>
+                    <option value="1">Sold</option>
+                </select>
                 <button type="submit">Search</button>
             </form>
             <div id="queryResults"></div>
@@ -42,9 +53,19 @@
         <div class="tab-content" id="modify">
             <h2>Modify Database</h2>
             <form id="modifyForm">
-                <input type="text" placeholder="Card ID">
-                <input type="text" placeholder="Field to modify">
-                <input type="text" placeholder="New value">
+                <input type="number" name="cardId" placeholder="Card ID" required>
+                <select name="field" required>
+                    <option value="">Select Field</option>
+                    <option value="year">Year</option>
+                    <option value="description">Description</option>
+                    <option value="name">Name</option>
+                    <option value="type">Type</option>
+                    <option value="condition">Condition</option>
+                    <option value="cost">Cost</option>
+                    <option value="quantity">Quantity</option>
+                    <option value="sold">Sold Status</option>
+                </select>
+                <input type="text" name="newValue" placeholder="New value" required>
                 <button type="submit">Modify</button>
             </form>
         </div>

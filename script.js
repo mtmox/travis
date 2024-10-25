@@ -17,46 +17,105 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Form submission handlers
-    document.getElementById('cardForm').addEventListener('submit', (e) => {
+    document.getElementById('cardForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        // Here you would typically send the data to your SQLite database
-        console.log('Card form submitted');
-        // Clear the form
-        e.target.reset();
+        const formData = new FormData(e.target);
+        const cardData = Object.fromEntries(formData.entries());
+        try {
+            const response = await fetch('/api/addCards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cardData),
+            });
+            if (response.ok) {
+                const result = await response.json();
+                alert(`${result.count} card(s) added successfully`);
+                e.target.reset();
+            } else {
+                const errorData = await response.json();
+                alert(`Error adding card(s): ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error adding card(s)');
+        }
     });
 
-    document.getElementById('queryForm').addEventListener('submit', (e) => {
+    document.getElementById('queryForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        // Here you would typically query your SQLite database
-        console.log('Query form submitted');
-        // For demonstration, let's just add some placeholder results
-        document.getElementById('queryResults').innerHTML = '<p>Query results would appear here.</p>';
+        const formData = new FormData(e.target);
+        const queryData = Object.fromEntries(formData.entries());
+        try {
+            const queryParams = new URLSearchParams(queryData).toString();
+            const response = await fetch(`/api/queryCards?${queryParams}`);
+            if (response.ok) {
+                const results = await response.json();
+                displayResults(results);
+            } else {
+                const errorData = await response.json();
+                alert(`Error querying cards: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error querying cards');
+        }
     });
 
-    document.getElementById('modifyForm').addEventListener('submit', (e) => {
+    document.getElementById('modifyForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        // Here you would typically modify an entry in your SQLite database
-        console.log('Modify form submitted');
-        // Clear the form
-        e.target.reset();
+        const formData = new FormData(e.target);
+        const modifyData = Object.fromEntries(formData.entries());
+        try {
+            const response = await fetch('/api/modifyCard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(modifyData),
+            });
+            if (response.ok) {
+                alert('Card modified successfully');
+                e.target.reset();
+            } else {
+                const errorData = await response.json();
+                alert(`Error modifying card: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error modifying card');
+        }
     });
 });
 
-// Placeholder functions for database operations
-// These functions would need to be implemented to interact with your SQLite database
+function displayResults(results) {
+    const resultsDiv = document.getElementById('queryResults');
+    if (results.length === 0) {
+        resultsDiv.innerHTML = '<p>No results found.</p>';
+        return;
+    }
 
-function addCard(cardData) {
-    // Implementation for adding a card to the database
-    console.log('Adding card:', cardData);
-}
+    const headers = ['ID', 'Year', 'Description', 'Name', 'Type', 'Condition', 'Cost', 'Quantity', 'Sold'];
+    let html = '<table><tr>';
+    headers.forEach(header => {
+        html += `<th>${header}</th>`;
+    });
+    html += '</tr>';
 
-function queryCards(searchTerm) {
-    // Implementation for querying cards from the database
-    console.log('Querying cards with term:', searchTerm);
-    return []; // This should return an array of results
-}
+    results.forEach(row => {
+        html += '<tr>';
+        headers.forEach(header => {
+            const key = header.toLowerCase();
+            let value = row[key];
+            if (key === 'sold') {
+                value = value ? 'Yes' : 'No';
+            }
+            html += `<td>${value}</td>`;
+        });
+        html += '</tr>';
+    });
+    html += '</table>';
 
-function modifyCard(cardId, field, newValue) {
-    // Implementation for modifying a card in the database
-    console.log('Modifying card:', cardId, field, newValue);
+    resultsDiv.innerHTML = html;
 }
