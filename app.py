@@ -2,6 +2,10 @@
 from flask import Flask, request, jsonify, send_from_directory
 import sqlite3
 import os
+import sys
+import shutil
+import datetime
+import signal
 
 app = Flask(__name__)
 
@@ -103,6 +107,41 @@ def modify_card():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+
+@app.route('/api/stopApp', methods=['POST'])
+def stop_app():
+    def shutdown_server():
+        # Get the current process ID
+        current_pid = os.getpid()
+        
+        # Get the parent process ID
+        parent_pid = os.getppid()
+        
+        # Send SIGINT (equivalent to Ctrl+C) to the parent process
+        os.kill(parent_pid, signal.SIGINT)
+        
+        # Terminate the current process
+        os.kill(current_pid, signal.SIGTERM)
+
+    shutdown_server()
+    return jsonify({'message': 'Server shutting down...'}), 200
+    
+
+
+@app.route('/api/backupDatabase', methods=['POST'])
+def backup_database():
+    # Replace this with the actual path where you want to store the backup
+    BACKUP_PATH = '/Volumes/library'
+    
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    backup_file = f'cards_backup_{timestamp}.db'
+    backup_full_path = os.path.join(BACKUP_PATH, backup_file)
+    
+    try:
+        shutil.copy2('cards.db', backup_full_path)
+        return jsonify({'message': 'Database backed up successfully', 'backupFile': backup_file}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
