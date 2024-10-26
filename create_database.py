@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS data (
     year INTEGER,
     description TEXT,
     name TEXT,
+    card_number TEXT,
     type TEXT,
     condition TEXT,
     cost REAL,

@@ -96,7 +96,7 @@ function displayResults(results) {
         return;
     }
 
-    const headers = ['ID', 'Year', 'Description', 'Name', 'Type', 'Condition', 'Cost', 'Quantity', 'Sold'];
+    const headers = ['ID', 'Year', 'Description', 'Name', 'Card_Number', 'Type', 'Condition', 'Cost', 'Quantity', 'Sold'];
     let html = '<table><tr>';
     headers.forEach(header => {
         html += `<th>${header}</th>`;

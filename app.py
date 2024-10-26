@@ -32,12 +32,13 @@ def add_cards():
         for _ in range(quantity):
             cursor.execute('''
                 INSERT INTO data 
-                (year, description, name, type, condition, cost, quantity, sold)
+                (year, description, name, card_number, type, condition, cost, quantity, sold)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 card_data['year'],
                 card_data['description'],
                 card_data['name'],
+                card_data['card_number'],
                 card_data['type'],
                 card_data['condition'],
                 card_data['cost'],
@@ -62,7 +63,7 @@ def query_cards():
     cursor = conn.cursor()
     try:
         query = '''
-            SELECT id, year, description, name, type, condition, cost, quantity, sold
+            SELECT id, year, description, name, card_number, type, condition, cost, quantity, sold
             FROM data 
             WHERE 1=1
         '''
@@ -131,7 +132,7 @@ def stop_app():
 @app.route('/api/backupDatabase', methods=['POST'])
 def backup_database():
     # Replace this with the actual path where you want to store the backup
-    BACKUP_PATH = '/Volumes/library'
+    BACKUP_PATH = 'D:/'
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_file = f'cards_backup_{timestamp}.db'
